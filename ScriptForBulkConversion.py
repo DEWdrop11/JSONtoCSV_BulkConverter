@@ -49,3 +49,75 @@ def create_list_from_json(jsonfile):
 
     return data_list
   
+    
+    
+  def write_csv():
+    list_of_files = get_list_of_json_files()
+    for file in list_of_files:
+        row = create_list_from_json(f'descriptions/{file}')  # create the row to be added to csv for each file (json-file)
+        with open('output.csv', 'a') as c:
+            writer = csv.writer(c)
+            writer.writerow(row)
+        c.close()
+        
+if __name__=="__main__":
+    write_csv()
+    
+import pandas as pd
+import json
+
+with open('example_1.json') as f:
+    data = json.load(f)
+    
+    
+    
+from pandas.io.json import json_normalize
+df = json_normalize(data)
+print(df)
+
+# Output
+#   color  fruit   size
+# 0   Red  Apple  Large
+
+
+
+df.to_csv('output_u.csv', index=False)
+
+import pandas as pd
+import json
+from pandas.io.json import json_normalize
+with open('ISIC_0000000', 'r') as f:
+    data = json.load(f)
+df = json_normalize(data)
+print(df.columns)
+
+# Output
+
+Index(['_id', '_modelType', 'created', 'creator._id', 'creator.name',
+       'dataset._accessLevel', 'dataset._id', 'dataset.description',
+       'dataset.license', 'dataset.name', 'dataset.updated',
+       'meta.acquisition.image_type', 'meta.acquisition.pixelsX',
+       'meta.acquisition.pixelsY', 'meta.clinical.age_approx',
+       'meta.clinical.anatom_site_general', 'meta.clinical.benign_malignant',
+       'meta.clinical.diagnosis', 'meta.clinical.diagnosis_confirm_type',
+       'meta.clinical.melanocytic', 'meta.clinical.sex',
+       'meta.unstructured.diagnosis', 'meta.unstructured.id1',
+       'meta.unstructured.localization', 'meta.unstructured.site', 'name',
+       'notes.reviewed.accepted', 'notes.reviewed.time',
+       'notes.reviewed.userId', 'notes.tags', 'updated'],
+      dtype='object')
+
+
+
+to_be_dropped = ['created','dataset.license', 'dataset.updated', 'meta.clinical.anatom_site_general', 'meta.unstructured.id1',
+       'meta.unstructured.localization', 'meta.unstructured.site',
+       'notes.reviewed.accepted', 'notes.reviewed.time',
+       'notes.reviewed.userId', 'notes.tags', 'updated' ]
+df.drop(columns = to_be_dropped, inplace = True)
+
+
+
+df.to_csv('output.csv', index=False)
+
+
+ 
